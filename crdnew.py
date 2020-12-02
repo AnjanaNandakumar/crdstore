@@ -56,11 +56,7 @@ def create(key,value,time1=0):# creating and appending to json file
                     json.dump(json_object,outfile)
                 if(time1!=0):
                     k[key]=time.time()+time1
-                    o={}
-                    o[key]=k[key]
-                    with open("expire.json", "w") as outfile:
-                        exp.update(o)
-                        json.dump(exp,outfile)
+                    
 
             else:
                 print("Memory limit exceeded!! ")#error message when memory more than specified
