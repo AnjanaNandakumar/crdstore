@@ -1,9 +1,14 @@
-import time
 import socket
+
+
+from _thread import *
+
+import time
 import sys
 import json
 import os.path 
 from os import path
+
 
 ServerSocket = socket.socket()
 host = '127.0.0.1'
@@ -18,12 +23,13 @@ except socket.error as e:
     exit()
 
 ServerSocket.bind((host, port))
+
 l=[]
 starttime=[]
 exp=[]
 dictionary ={} 
 k={}
-expire={}
+
 
 def create(key,value,time1=0):# creating and appending to json file
     if (path.exists("sample.json")):
@@ -38,6 +44,9 @@ def create(key,value,time1=0):# creating and appending to json file
         print("error-this key already exists")
     else:
         if (key.isalpha()):
+            with open("sample.json", "r") as outfile: 
+                json_object = json.load(outfile) 
+            
             if(sys.getsizeof(json_object)<(1024*1024*1024)) and ((sys.getsizeof(value))<(16*1024*1024)):
                 l={}
                 l[key]=value
@@ -47,10 +56,17 @@ def create(key,value,time1=0):# creating and appending to json file
                     json.dump(json_object,outfile)
                 if(time1!=0):
                     k[key]=time.time()+time1
+                    o={}
+                    o[key]=k[key]
+                    with open("expire.json", "w") as outfile:
+                        exp.update(o)
+                        json.dump(exp,outfile)
+
             else:
                 print("Memory limit exceeded!! ")#error message when memory more than specified
         else:
             print("Invalind key !! key must be only alphabets and not special characters or numbers")#error messagewhen key is invalid
+
 
 def read(key):
     if (path.exists("sample.json")):
@@ -75,6 +91,7 @@ def read(key):
             stri=str(key)+":"+str(b) #to return the value in the format of JasonObject "
             return stri
             
+
 def delete(key):
     
     if (path.exists("sample.json")):
